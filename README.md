@@ -1,21 +1,31 @@
 # Trellis — letöltőoldal
 
-Ez a repó **csak a weboldalt és a kiadásokat** tartalmazza. A Flutter forráskód
+Ez a repó **csak a weboldalt és a telepítőt** tartalmazza. A Flutter forráskód
 nincs itt.
 
 - **Weboldal:** https://szekely97david-sudo.github.io/trellis-app/
-- **Letöltés:** a `Releases` fül legfrissebb kiadásának `trellis.apk` fájlja
+- **Telepítő:** `trellis.apk` ugyanitt
 - **Verzió-manifeszt:** `latest.json` — ezt kérdezi le maga az app, amikor
-  frissítést keres
+  frissítést keres, és ebből veszi a weboldal is a verzió-feliratot
 
 ## Kiadás menete
 
-1. `flutter build apk --release` a Trellis projektben
-2. Az elkészült APK feltöltése új GitHub Release-be, **`trellis.apk` néven**
-   (a fájlnév kötött: a `releases/latest/download/trellis.apk` cím erre mutat)
-3. `latest.json` frissítése: `versionName`, `versionCode`, `date`, `sizeBytes`,
-   `notes`
-4. Push — a GitHub Pages pár percen belül átveszi
+1. A Trellis projektben:
+   `flutter build apk --release --target-platform android-arm,android-arm64`
+2. Az elkészült `build/app/outputs/flutter-apk/app-release.apk` ide másolva,
+   **`trellis.apk` néven** (a fájlnév kötött — a weboldal és a `latest.json` is
+   erre mutat).
+3. `latest.json`: `versionName`, `versionCode`, `date`, `sizeBytes`, `notes`.
+4. Push — a GitHub Pages pár percen belül átveszi.
 
-A `versionCode` **minden kiadásnál nő**. Az app ezt hasonlítja össze a sajátjával;
-ha a manifesztben nagyobb szám áll, jelzi a frissítést.
+A `versionCode` **minden kiadásnál nő**, és meg kell egyeznie a Trellis
+`pubspec.yaml`-jével és `lib/core/app_version.dart`-jával (erre teszt vigyáz).
+Az app ezt hasonlítja a sajátjához; ha a manifesztben nagyobb szám áll, jelzi a
+frissítést.
+
+## Ha egyszer nagyra nő a repó
+
+Az APK a git történetében marad, tehát minden kiadás hozzáad ~65 MB-ot. Húsz
+kiadás körül érdemes átállni GitHub Releases-re: az APK oda kerül, a
+`latest.json` `apkUrl`-je pedig a release-fájlra mutat. A weboldal és az app
+kódja ettől nem változik — csak a `latest.json` egy sora.
