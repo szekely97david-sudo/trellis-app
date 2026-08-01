@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trellis — szokások, kalória, edzés egy appban</title>
+<meta name="description" content="Trellis: szokáskövető, kalóriaszámláló, edzésnapló, bibliaolvasó terv, ciklusnaptár és közös listák — egyetlen Android alkalmazásban. Ingyenes, letölthető.">
+<meta name="theme-color" content="#0E1015">
+<meta property="og:title" content="Trellis">
+<meta property="og:description" content="Szokások, kalória, edzés, Biblia, ciklus és közös listák — egy appban.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230E1015'/%3E%3Cg stroke='%23E5A83B' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M6 12h20M6 20h20M12 6v20M20 6v20'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0E1015; --surface:#171A21; --high:#1F232C; --line:#2A2F3A;
+    --ink:#ECEAE3; --muted:#8A8F9C; --accent:#E5A83B; --on-accent:#151109;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    overflow-x:hidden;
+  }
+  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  a{color:var(--accent)}
+
+  /* ---- fejléc ---- */
+  header{position:relative;overflow:hidden;padding:56px 0 40px;text-align:center}
+  header::before{
+    content:"";position:absolute;inset:-40% -20% auto;height:520px;
+    background:radial-gradient(ellipse at 50% 0%, rgba(229,168,59,.16), transparent 62%);
+    pointer-events:none;
+  }
+  .mark{width:76px;height:76px;display:block;margin:0 auto 18px;position:relative}
+  h1{font-size:clamp(34px,7vw,52px);line-height:1.1;margin:0 0 12px;letter-spacing:-.02em;position:relative}
+  .tagline{font-size:clamp(16px,3.4vw,20px);color:var(--muted);margin:0 auto 30px;max-width:30em;position:relative}
+
+  /* ---- letöltés ---- */
+  .cta{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px}
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    background:var(--accent);color:var(--on-accent);
+    font-size:18px;font-weight:650;text-decoration:none;
+    padding:15px 30px;border-radius:14px;border:0;cursor:pointer;
+    box-shadow:0 8px 28px rgba(229,168,59,.22);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 12px 34px rgba(229,168,59,.3)}
+  .btn:active{transform:translateY(0)}
+  .meta{font-size:14px;color:var(--muted)}
+  .meta strong{color:var(--ink);font-weight:600}
+
+  /* ---- szekciók ---- */
+  section{padding:44px 0;border-top:1px solid var(--line)}
+  h2{font-size:clamp(21px,4.4vw,27px);margin:0 0 6px;letter-spacing:-.01em}
+  .lead{color:var(--muted);margin:0 0 26px;max-width:46em}
+
+  /* ---- modul-rács ---- */
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(min-width:680px){.grid{grid-template-columns:repeat(3,1fr)}}
+  .tile{
+    background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:20px 18px;min-height:150px;display:flex;flex-direction:column;
+  }
+  .tile svg{width:30px;height:30px;color:var(--accent);margin-bottom:12px}
+  .tile h3{margin:0 0 6px;font-size:17px}
+  .tile p{margin:0;font-size:14px;color:var(--muted);line-height:1.5}
+
+  /* ---- telepítés lépései ---- */
+  ol.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:12px}
+  ol.steps li{
+    counter-increment:s;position:relative;
+    background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:16px 18px 16px 60px;
+  }
+  ol.steps li::before{
+    content:counter(s);position:absolute;left:16px;top:15px;
+    width:28px;height:28px;border-radius:9px;
+    background:var(--high);color:var(--accent);
+    display:grid;place-items:center;font-weight:700;font-size:15px;
+  }
+  ol.steps strong{display:block;margin-bottom:2px}
+  ol.steps span{color:var(--muted);font-size:14.5px}
+
+  .note{
+    background:var(--high);border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:12px;padding:16px 18px;color:var(--muted);font-size:14.5px;
+  }
+  .note strong{color:var(--ink)}
+
+  footer{padding:36px 0 60px;border-top:1px solid var(--line);color:var(--muted);font-size:14px;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <svg class="mark" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+      <rect width="64" height="64" rx="16" fill="#171A21" stroke="#2A2F3A"/>
+      <g stroke="#E5A83B" stroke-width="3.2" stroke-linecap="round">
+        <path d="M14 25h36M14 39h36M25 14v36M39 14v36"/>
+      </g>
+    </svg>
+    <h1>Trellis</h1>
+    <p class="tagline">Szokások, kalória, edzés, bibliaolvasás, ciklus és közös listák — egyetlen appban, a telefonodon.</p>
+
+    <div class="cta">
+      <a class="btn" id="dl" href="https://github.com/szekely97david-sudo/trellis-app/releases/latest/download/trellis.apk" download>
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Letöltés Androidra
+      </a>
+      <p class="meta" id="meta">Ingyenes · Android 8.0 vagy újabb</p>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2>Mit tud?</h2>
+    <p class="lead">Hat modul, amiből csak azt kapcsolod be, amire szükséged van. Minden adat a saját Google-fiókodhoz tartozik, és az összes eszközöd között szinkronban marad.</p>
+    <div class="grid">
+      <div class="tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="m9 11 3 3L22 4"/></svg>
+        <h3>Szokások</h3>
+        <p>Célok saját mércékkel és ütemezéssel, bepótlás, haladás-térkép, teendők.</p>
+      </div>
+      <div class="tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7a3 3 0 0 0 6 0V2M6 9v13M18 2c-1.7 1.4-2.5 3.6-2.5 6s.8 4 2.5 5v9"/></svg>
+        <h3>Kalória</h3>
+        <p>Napló makrókkal, vonalkód-olvasó, receptek, cél-kalkulátor, súlytrend, heti bank.</p>
+      </div>
+      <div class="tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5 17.5 17.5M4 8v8M8 4v16M16 4v16M20 8v8"/></svg>
+        <h3>Edzés</h3>
+        <p>Terv és tény külön, szettek élőben, pihenő-óra, lebegő ablak, sablonok, statisztika.</p>
+      </div>
+      <div class="tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <h3>Biblia</h3>
+        <p>Olvasási terv a saját tempódra szabva, teljes Károli-szöveg, jegyzetek, kvíz.</p>
+      </div>
+      <div class="tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 2-3.4 2-5a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 1.6.5 3.5 2 5l7 7z"/></svg>
+        <h3>Ciklus</h3>
+        <p>Menstruációs naptár előrejelzéssel, tünetek, napló — PIN-kóddal védve.</p>
+      </div>
+      <div class="tile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h12M9 12h12M9 18h12"/><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/></svg>
+        <h3>Közös listák</h3>
+        <p>Bevásárlólista, amit a párod is szerkeszt — élőben, mindkét telefonon.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Telepítés</h2>
+    <p class="lead">A Trellis nem a Play Áruházból jön, hanem közvetlenül innen. Emiatt a telefonod egyszer rá fog kérdezni, hogy engedélyezed-e — utána minden a megszokott módon megy.</p>
+    <ol class="steps">
+      <li><strong>Töltsd le a fenti gombbal</strong><span>A böngésző figyelmeztethet, hogy „ilyen fájl árthat a készüléknek" — ez minden Play Áruházon kívüli appnál megjelenik. Válaszd a „Mégis letöltöm" lehetőséget.</span></li>
+      <li><strong>Nyisd meg a letöltött fájlt</strong><span>Az értesítések közül vagy a Fájlok appból, a Letöltések mappából.</span></li>
+      <li><strong>Engedélyezd a telepítést</strong><span>Ha a telefon kéri, kapcsold be az „Ismeretlen alkalmazások telepítése" engedélyt annak az appnak, amiből megnyitottad (böngésző vagy Fájlok). Ez egyszeri lépés.</span></li>
+      <li><strong>Lépj be a Google-fiókoddal</strong><span>Enélkül az adatok csak azon az egy telefonon lennének meg. Belépés után minden eszközöd ugyanazt látja.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Frissítés</h2>
+    <p class="lead">Az appot nem kell figyelned: ha új verzió jelenik meg, maga szól, és egy gombbal letölti és telepíti. Ehhez sem kell Play Áruház.</p>
+    <div class="note">
+      <strong>Adataid.</strong> A Trellis a saját Google-fiókodhoz köti az adataidat, és nem ad tovább semmit harmadik félnek — nincs benne hirdetés és nincs benne követés. A telefonról letörölve sem vesznek el: új készüléken elég belépned.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Trellis · készült szeretetből, magyarul<br>
+    <span id="ver"></span></p>
+  </div>
+</footer>
+
+<script>
+// A verzió-adatokat a latest.json adja, hogy kiadáskor csak azt kelljen frissíteni.
+fetch('latest.json?t=' + Date.now()).then(r => r.json()).then(d => {
+  const mb = d.sizeBytes ? (d.sizeBytes / 1048576).toFixed(1) + ' MB · ' : '';
+  document.getElementById('meta').innerHTML =
+    'Ingyenes · Android 8.0 vagy újabb<br>' + mb + '<strong>' + d.versionName + '</strong> verzió · ' + (d.date || '');
+  if (d.apkUrl) document.getElementById('dl').href = d.apkUrl;
+  document.getElementById('ver').textContent = 'Legutóbbi kiadás: ' + d.versionName;
+}).catch(() => {});
+</script>
+</body>
+</html>
