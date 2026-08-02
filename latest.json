@@ -1,15 +1,21 @@
 {
-  "versionName": "1.2.1",
-  "versionCode": 5,
+  "versionName": "1.3.0",
+  "versionCode": 6,
   "date": "2026-08-02",
   "apkUrl": "https://szekely97david-sudo.github.io/trellis-app/trellis.apk",
-  "sizeBytes": 68064287,
+  "sizeBytes": 68638635,
   "notes": [
-    "JAVÍTVA: nem szólt semmi, ha új verzió jött ki — a frissítés-sáv a rendszer órája alá csúszott. Mostantól a helyén van, és verziónként egyszer fel is ugrik egy ablak azzal, mi újult meg.",
-    "Az app előhozáskor is ránéz, van-e frissítés (eddig csak indításkor).",
-    "JAVÍTVA: éjfél után beragadt a tegnapi nap, ha az appot csak előhoztad a háttérből.",
-    "A modulváltó gomb felirata mostantól „Modulok”, és a modulok balról benyíló fiókban vannak — a képernyő bal szélétől behúzva is előjönnek.",
-    "Szokások – Ma: vízszintes elhúzással lapozhatsz a napok között, és a Ma fülre koppintva mindig a mai napon kötsz ki.",
-    "Edzés: új „Cél és tény külön” mód — a mezőbe a célt írod, pipáláskor rákérdez, mi ment ténylegesen."
+    "Kalória: új „Tervező” — megmutatja, mi fér még bele a napba étkezésekre bontva, és egy étkezést le is köthetsz.",
+    "Kalória: minden étkezés mellett ott a fehérje, szénhidrát, zsír és a napi keret százaléka. A naplóban megjelenik az aznapi edzés is.",
+    "Kalória: új „Ezt szoktad — Reggeli” lista, étkezésenként külön tanulva.",
+    "JAVÍTVA: a keresés eddig csak pontos szórenddel talált — a „jázmin rizs” nem hozta ki a „Rizs, jázmin”-t.",
+    "Kalória: új „Táblázat” mód a fotós felismerésben — az AI csak leolvassa a tápértéktáblát, és te mondod meg, melyik oszlop és sor mit jelent.",
+    "Kalória: nyaralás-mód (a fotó várólistára kerül net nélkül) és „Becsült fenntartó” a statisztikában.",
+    "Edzés: a szett és a gyakorlat törléséhez nyomva kell tartani, és 40 másodpercig visszavonható.",
+    "Edzés: új „Gyakorlat beállításai” lap (pihenő-kerék, egyoldalasság, gépbeállítás), szuperszett-betűjelek, RIR mező, „Foglalt a gép — helyette mit?” és edzés végi izom-visszajelzés.",
+    "Szokások: heti N alkalmas céloknál kiírjuk, hol tartasz és mennyi időd maradt; az elhagyandó céloknál másodperc-pontos tiszta-idő számláló.",
+    "Szokások: új „Tegnapról kimaradt” sáv — egy koppintással bepótolhatod, amit elfelejtettél bejelölni.",
+    "Teendők: mappákba rendezhetők, és a pipa mostantól kijelöl — az „Elvégezve” gomb zárja le, több teendőt egyszerre.",
+    "Közös listák: egy sorba mindent beírhatsz — „2 kg paradicsom @Dóra !! holnap”. Lista-típusok, határidő-blokkok, „⇅ Nézet” menü, „A boltban vagyok” mód, sablonok és tömeges kipipálás."
   ]
 }
