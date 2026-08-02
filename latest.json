@@ -1,15 +1,18 @@
 {
-  "versionName": "1.1.0",
-  "versionCode": 3,
+  "versionName": "1.2.0",
+  "versionCode": 4,
   "date": "2026-08-02",
   "apkUrl": "https://szekely97david-sudo.github.io/trellis-app/trellis.apk",
-  "sizeBytes": 67670527,
+  "sizeBytes": 67884083,
   "notes": [
-    "Bevitel-lista: több ételt válogatsz össze, és egyszerre rögzíted.",
-    "Visszatért az ötféle mennyiség-bevitel (tekerő, görgő, húzás, scrubber, beírás).",
-    "Három nap-nézet: sávok, gyűrű és makró-bontás.",
-    "Kalória-beállítások: követett tápanyagok, étkezés-szerkesztő, zsír-sáv.",
-    "Testsúly két tizedesig, a naplótétel utólag módosítható.",
-    "Új verziónál felül sáv jelzi, hogy van frissítés."
+    "JAVÍTVA: az Edzés naplója üres maradt és „index kell hozzá” hibát írt — a korábbi edzéseid újra ott vannak, velük együtt az „Előző” sor és a legutóbbi súlyok, ismétlések.",
+    "A folyamatban lévő edzés a kezdőlapról is folytatható vagy eldobható.",
+    "Új Ételtár: Saját ételek és Receptek külön fülön — saját ételt végre fel lehet vinni és javítani.",
+    "Vonalkód: ha nincs találat, egy gombbal mehetsz a címkefotóra vagy a kézi felvitelre; a talált termék mentés előtt javítható.",
+    "A lefotózott címke saját ételként mentődik, nem gyors bejegyzésként.",
+    "A naplóban a vízszintes elhúzás NAPOT LAPOZ — nem törli a tételt.",
+    "A nap fejléce nem vált magától, és a mennyiség-lap nem kérdez rá újra a módra.",
+    "Emlékszik, mennyit és milyen egységben rögzítettél legutóbb — a naplódból is tanul.",
+    "A Kalória beállításai csempés lapokra bomlottak."
   ]
 }
