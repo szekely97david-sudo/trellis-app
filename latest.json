@@ -1,12 +1,15 @@
 {
-  "versionName": "1.0.1",
-  "versionCode": 2,
-  "date": "2026-08-01",
+  "versionName": "1.1.0",
+  "versionCode": 3,
+  "date": "2026-08-02",
   "apkUrl": "https://szekely97david-sudo.github.io/trellis-app/trellis.apk",
-  "sizeBytes": 67031343,
+  "sizeBytes": 67670527,
   "notes": [
-    "Tányérfotó: az AI mostantól ÖSSZETEVŐKRE bontja az ételt.",
-    "Összetevőnként csúszkával állítható a mennyiség, vagy pontosan beírható.",
-    "A félreismert összetevő kivehető, a hiányzó pedig felvehető az ételbázisból."
+    "Bevitel-lista: több ételt válogatsz össze, és egyszerre rögzíted.",
+    "Visszatért az ötféle mennyiség-bevitel (tekerő, görgő, húzás, scrubber, beírás).",
+    "Három nap-nézet: sávok, gyűrű és makró-bontás.",
+    "Kalória-beállítások: követett tápanyagok, étkezés-szerkesztő, zsír-sáv.",
+    "Testsúly két tizedesig, a naplótétel utólag módosítható.",
+    "Új verziónál felül sáv jelzi, hogy van frissítés."
   ]
 }
