@@ -1,18 +1,15 @@
 {
-  "versionName": "1.2.0",
-  "versionCode": 4,
+  "versionName": "1.2.1",
+  "versionCode": 5,
   "date": "2026-08-02",
   "apkUrl": "https://szekely97david-sudo.github.io/trellis-app/trellis.apk",
-  "sizeBytes": 67884083,
+  "sizeBytes": 68064287,
   "notes": [
-    "JAVÍTVA: az Edzés naplója üres maradt és „index kell hozzá” hibát írt — a korábbi edzéseid újra ott vannak, velük együtt az „Előző” sor és a legutóbbi súlyok, ismétlések.",
-    "A folyamatban lévő edzés a kezdőlapról is folytatható vagy eldobható.",
-    "Új Ételtár: Saját ételek és Receptek külön fülön — saját ételt végre fel lehet vinni és javítani.",
-    "Vonalkód: ha nincs találat, egy gombbal mehetsz a címkefotóra vagy a kézi felvitelre; a talált termék mentés előtt javítható.",
-    "A lefotózott címke saját ételként mentődik, nem gyors bejegyzésként.",
-    "A naplóban a vízszintes elhúzás NAPOT LAPOZ — nem törli a tételt.",
-    "A nap fejléce nem vált magától, és a mennyiség-lap nem kérdez rá újra a módra.",
-    "Emlékszik, mennyit és milyen egységben rögzítettél legutóbb — a naplódból is tanul.",
-    "A Kalória beállításai csempés lapokra bomlottak."
+    "JAVÍTVA: nem szólt semmi, ha új verzió jött ki — a frissítés-sáv a rendszer órája alá csúszott. Mostantól a helyén van, és verziónként egyszer fel is ugrik egy ablak azzal, mi újult meg.",
+    "Az app előhozáskor is ránéz, van-e frissítés (eddig csak indításkor).",
+    "JAVÍTVA: éjfél után beragadt a tegnapi nap, ha az appot csak előhoztad a háttérből.",
+    "A modulváltó gomb felirata mostantól „Modulok”, és a modulok balról benyíló fiókban vannak — a képernyő bal szélétől behúzva is előjönnek.",
+    "Szokások – Ma: vízszintes elhúzással lapozhatsz a napok között, és a Ma fülre koppintva mindig a mai napon kötsz ki.",
+    "Edzés: új „Cél és tény külön” mód — a mezőbe a célt írod, pipáláskor rákérdez, mi ment ténylegesen."
   ]
 }
