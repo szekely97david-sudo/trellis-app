@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="hu">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Trellis — szokások, kalória, edzés egy appban</title>
+<meta name="description" content="Trellis: szokáskövető, kalóriaszámláló, súlymenedzsment, edzésnapló, bibliaolvasó terv, ciklusnaptár, napló és közös listák — egyetlen Android-alkalmazásban. Ingyenes, reklám nélkül.">
+<meta name="theme-color" content="#D9D6CD">
+<meta property="og:title" content="Trellis">
+<meta property="og:description" content="Adj keretet a növekedésednek — szokások, kalória, edzés, Biblia, ciklus, napló és közös listák egy appban.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="icon-512.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+  :root{
+    --bg:#D9D6CD; --bg-2:#E6E3DC; --paper:#F3F1EC; --ink:#1E2A1F; --muted:#5C6358;
+    --line:#CBC7BC; --green:#2E6A2E; --green-2:#4E9A3A; --green-3:#A9C98F;
+    --on-green:#F3F1EC; --rail-w:184px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{margin:0;background:var(--bg-2);color:var(--ink);overflow-x:hidden;
+    font:17px/1.65 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+  a{color:var(--green)}
+  @media(min-width:980px){.page{margin-right:var(--rail-w)}}
+
+  /* ---------- jobb oldali sáv-menü ---------- */
+  .rail{display:none}
+  @media(min-width:980px){
+    .rail{display:flex;flex-direction:column;position:fixed;top:0;right:0;bottom:0;width:var(--rail-w);z-index:20}
+    .rail a{flex:1;display:flex;align-items:flex-end;padding:12px 16px;text-decoration:none;font-size:13px;
+      letter-spacing:.02em;color:#26301F;border-bottom:1px solid rgba(0,0,0,.05);transition:flex .35s ease}
+    .rail a:hover{flex:1.35}
+    .rail a.on{flex:1.7;font-weight:600}
+    .rail a span{opacity:.55;margin-right:8px;font-variant-numeric:tabular-nums}
+    .rail a:nth-child(1){background:#D2CFC5}
+    .rail a:nth-child(2){background:#C3CDB5}
+    .rail a:nth-child(3){background:#A9C98F}
+    .rail a:nth-child(4){background:#6E9A57;color:#F3F1EC}
+    .rail a:nth-child(5){background:#2E6A2E;color:#F3F1EC;font-weight:600}
+  }
+
+  /* ---------- mobil fejléc ---------- */
+  .topbar{position:sticky;top:0;z-index:15;display:flex;align-items:center;justify-content:space-between;
+    padding:10px 16px;background:rgba(217,214,205,.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line)}
+  .topbar b{font-weight:700;color:var(--green);font-size:18px;letter-spacing:-.01em}
+  .topbar a{font-size:14px;font-weight:600;text-decoration:none;background:var(--green);color:var(--on-green);
+    padding:7px 14px;border-radius:999px}
+  @media(min-width:980px){.topbar{display:none}}
+
+  /* ---------- nyitókép: a splash-videó ---------- */
+  .hero{position:relative;min-height:100svh;display:grid;align-items:center;overflow:hidden;
+    background:#D8D6CD}
+  .hero-in{position:relative;display:grid;grid-template-columns:1fr;align-items:center;gap:0;
+    max-width:1120px;margin:0 auto;width:100%;padding:0 16px 36px}
+  @media(min-width:820px){.hero-in{grid-template-columns:1fr minmax(300px,.85fr);gap:24px;padding:32px 40px}}
+  .film{position:relative;justify-self:center;width:100%;max-width:380px;aspect-ratio:9/16;
+    /* a videó széle beleolvad a háttérbe — nincs doboz, nincs keret */
+    -webkit-mask-image:radial-gradient(farthest-side, #000 62%, transparent 100%);
+            mask-image:radial-gradient(farthest-side, #000 62%, transparent 100%)}
+  .film video,.film img{width:100%;height:100%;object-fit:cover;display:block}
+  @media(max-width:819px){
+    .film{max-width:none;width:min(100%, calc(62svh * .5625));height:62svh;order:-1;margin:-8px auto -30px}
+  }
+  .copy{position:relative;z-index:1;animation:up .9s .2s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .claim{font-weight:250;font-size:clamp(38px,6.6vw,72px);line-height:1.04;letter-spacing:-.025em;margin:0 0 18px;color:#1F3A1F}
+  .claim b{font-weight:700;color:var(--green)}
+  .sub{color:var(--muted);max-width:31em;margin:0 0 28px;font-size:18px}
+  .btn{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:var(--on-green);
+    font-size:17px;font-weight:600;text-decoration:none;padding:15px 26px;border-radius:999px;
+    box-shadow:0 10px 28px rgba(46,106,46,.25);transition:transform .15s ease, box-shadow .15s ease}
+  .btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(46,106,46,.32)}
+  .meta{font-size:14px;color:var(--muted);margin-top:14px}
+  .meta strong{color:var(--ink);font-weight:600}
+
+  /* ---------- szekciók ---------- */
+  section{padding:88px 0}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 16px}
+  @media(min-width:760px){.wrap{padding:0 40px}}
+  .kicker{font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--green-2);margin:0 0 10px;font-weight:600}
+  h2{font-weight:250;font-size:clamp(32px,5.6vw,52px);line-height:1.08;letter-spacing:-.02em;margin:0 0 14px}
+  .lead{color:var(--muted);max-width:42em;margin:0 0 34px}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1)}
+  .reveal.in{opacity:1;transform:none}
+
+  /* általános leírás */
+  .about{display:grid;gap:18px;grid-template-columns:1fr}
+  @media(min-width:760px){.about{grid-template-columns:repeat(3,1fr)}}
+  .pill{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:20px 22px}
+  .pill strong{display:block;color:var(--green);margin-bottom:4px}
+  .pill span{color:var(--muted);font-size:15.5px}
+
+  /* a rajzolt Lugas-háttér (ugyanaz, mint az app új alap-háttere) */
+  /* rögzített, teljes képernyős réteg: a .lugas szakaszok átlátszók, mögöttük „áll" a kép */
+  body::before{content:"";position:fixed;inset:0;z-index:-1;
+    background:#F4F3EE url(lugas.webp) center/cover no-repeat}
+  @media(min-width:760px) and (min-aspect-ratio:1/1){body::before{background-image:url(lugas-szeles.webp)}}
+  .lugas{background:transparent}
+  .lugas .lead,.lugas h2,.lugas .kicker{text-shadow:0 0 12px #F4F3EE,0 0 4px #F4F3EE}
+  .lugas .pill,.lugas ol.steps li{background:rgba(255,255,255,.86);backdrop-filter:blur(2px)}  /* modulok */
+  .band-mod{background:var(--bg)}
+  .grid{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:560px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(min-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:22px;position:relative;overflow:hidden}
+  .card .ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+    background:linear-gradient(135deg,#DDEBCF,#C3DDAE);color:var(--green);margin-bottom:14px}
+  .card .ico svg{width:21px;height:21px}
+  .card h3{margin:0 0 6px;font-size:18px;font-weight:650}
+  .card p{margin:0;font-size:15px;color:var(--muted);line-height:1.55}
+  .card::after{content:"";position:absolute;right:-14px;bottom:-14px;width:64px;height:64px;border-radius:0 62% 0 62%;
+    background:linear-gradient(135deg,var(--green-3),var(--green-2));opacity:.18;transform:scale(0) rotate(-25deg);
+    transform-origin:100% 100%;transition:transform .9s .3s cubic-bezier(.3,1.5,.5,1)}
+  .card.in::after{transform:scale(1) rotate(0)}
+
+  /* telepítés */
+  ol.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:12px}
+  @media(min-width:760px){ol.steps{grid-template-columns:repeat(2,1fr)}}
+  ol.steps li{counter-increment:s;position:relative;background:var(--paper);border:1px solid var(--line);
+    border-radius:18px;padding:18px 18px 18px 66px}
+  ol.steps li::before{content:counter(s);position:absolute;left:18px;top:17px;width:32px;height:32px;border-radius:50%;
+    background:var(--green);color:var(--on-green);display:grid;place-items:center;font-weight:600;font-size:15px}
+  ol.steps strong{display:block;margin-bottom:3px}
+  ol.steps span{color:var(--muted);font-size:15px}
+
+  /* frissítés + adatok */
+  .band-dark{background:#2E6A2E;color:#EEF2E8}
+  .band-dark h2{color:#F3F1EC}
+  .band-dark .kicker{color:#BFE0A6}
+  .band-dark .lead{color:#D2E0C8}
+  .note{border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:18px 20px;background:rgba(255,255,255,.06);
+    color:#D2E0C8;font-size:15.5px;max-width:46em}
+  .note strong{color:#F3F1EC}
+
+  /* zárás */
+  .final{text-align:center;padding:96px 0 84px;background:radial-gradient(120% 100% at 50% 0%, #E6E3DC, #D2CFC5)}
+  .final img{width:160px;height:auto;display:block;margin:0 auto 6px;
+    -webkit-mask-image:radial-gradient(closest-side,#000 70%,transparent 100%);mask-image:radial-gradient(closest-side,#000 70%,transparent 100%)}
+  .final .lead{margin:0 auto 26px}
+  footer{padding:24px 16px 40px;text-align:center;color:var(--muted);font-size:14px;background:#D2CFC5}
+
+  @media (prefers-reduced-motion: reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<nav class="rail" aria-label="Oldal részei">
+  <a href="#kezdes"><span>01</span>Kezdés</a>
+  <a href="#mit-tud"><span>02</span>Mit tud?</a>
+  <a href="#telepites"><span>03</span>Telepítés</a>
+  <a href="#frissites"><span>04</span>Frissítés</a>
+  <a href="#letoltes"><span>05</span>Letöltés</a>
+</nav>
+
+<div class="page">
+<header class="topbar"><b>Trellis</b><a href="trellis.apk" class="dl-link">Letöltés</a></header>
+
+<section class="hero" id="kezdes">
+  <div class="hero-in">
+    <div class="copy">
+      <h1 class="claim">Adj keretet a <b>növekedésednek.</b></h1>
+      <p class="sub">Szokások, kalória, edzés, bibliaolvasás, ciklus, napló és közös listák — egyetlen appban, a telefonodon.</p>
+      <a class="btn dl-link" href="trellis.apk" download>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        Letöltés Androidra
+      </a>
+      <p class="meta" id="meta">Ingyenes · reklám nélkül · Android 8.0 vagy újabb</p>
+    </div>
+    <div class="film" aria-hidden="true">
+      <video id="film" muted playsinline autoplay preload="auto" poster="splash-elso.jpg">
+        <source src="splash.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+</section>
+
+<section id="mi-ez" class="lugas">
+  <div class="wrap">
+    <p class="kicker reveal">A Trellis</p>
+    <h2 class="reveal">Egy rács, amire felfuthatsz.</h2>
+    <p class="lead reveal">A növény sem magától jut fel a falra — kell mellé egy rács, ami tartja. A Trellis ez a rács a hétköznapjaidhoz: egy helyen követed, amit eszel, amit edzel, amit olvasol és amit szokássá akarsz tenni, és az app megmutatja, hogyan függnek össze.</p>
+    <div class="about">
+      <div class="pill reveal"><strong>Csak ami kell</strong><span>Minden modul külön kapcsolható. Ami nem érdekel, nem zavar.</span></div>
+      <div class="pill reveal"><strong>Egy nap, egy kép</strong><span>A modulok ugyanarra a napra épülnek: az edzés, az étkezés és a közérzet egymás mellett látszik.</span></div>
+      <div class="pill reveal"><strong>Magyarul, reklám nélkül</strong><span>Ingyenes, hirdetés nélküli app, magyar felülettel és súgóval minden laphoz.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="mit-tud" class="band-mod">
+  <div class="wrap">
+    <p class="kicker reveal">Modulok</p>
+    <h2 class="reveal">Mit tud?</h2>
+    <p class="lead reveal">Kilenc modul — mindegyiket akkor kapcsolod be, amikor szükséged van rá.</p>
+    <div class="grid">
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><path d="m9 11 3 3L22 4"/></svg></div>
+        <h3>Szokások és teendők</h3><p>Célok saját mércével és ütemezéssel, bepótlás, sorozatok, céltervező és teendőlista.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7a3 3 0 0 0 6 0V2M6 9v13M18 2c-1.7 1.4-2.5 3.6-2.5 6s.8 4 2.5 5v9"/></svg></div>
+        <h3>Kalória</h3><p>Étkezési napló makrókkal, vonalkód-olvasó, receptek, tányérfotó, nasi-arány és heti keret.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg></div>
+        <h3>Súlymenedzsment</h3><p>Testsúly és testmérések, reális ütem, böjtnapló, és egy terv, ami a naplódhoz igazodik.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5 17.5 17.5M4 8v8M8 4v16M16 4v16M20 8v8"/></svg></div>
+        <h3>Edzésnapló</h3><p>Terv és tény külön, szettek élőben, pihenő-óra, lebegő ablak, izomláz és regeneráció.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+        <h3>Biblia</h3><p>Olvasási terv a saját tempódra, teljes Károli-szöveg, napi ige, jegyzetek és kvíz.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 2-3.4 2-5a5 5 0 0 0-9-3 5 5 0 0 0-9 3c0 1.6.5 3.5 2 5l7 7z"/></svg></div>
+        <h3>Ciklus</h3><p>Menstruációs naptár előrejelzéssel, tünetekkel és jegyzetekkel — visszamenőleg is rögzíthető.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
+        <h3>Napló</h3><p>Közérzet, alvás, hangulat és energia pár koppintással — és hogy mi hatott mire.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h12M9 12h12M9 18h12"/><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"/></svg></div>
+        <h3>Közös listák</h3><p>Bevásárlólista, amit a párod is szerkeszt — élőben, mindkét telefonon —, és közös ételtár a háztartásnak.</p></div>
+      <div class="card reveal"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></div>
+        <h3>Widgetek</h3><p>A kezdőképernyőn is ott van, ami ma számít: szokások, kalória, teendők.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="telepites" class="lugas">
+  <div class="wrap">
+    <p class="kicker reveal">Telepítés</p>
+    <h2 class="reveal">Négy lépés, egyszer.</h2>
+    <p class="lead reveal">A Trellis nem a Play Áruházból jön, hanem közvetlenül innen. Emiatt a telefonod egyszer rá fog kérdezni, hogy engedélyezed-e — utána minden a megszokott módon megy.</p>
+    <ol class="steps reveal">
+      <li><strong>Töltsd le a fenti gombbal</strong><span>A böngésző figyelmeztethet, hogy „ilyen fájl árthat a készüléknek” — ez minden Play Áruházon kívüli appnál megjelenik. Válaszd a „Mégis letöltöm” lehetőséget.</span></li>
+      <li><strong>Nyisd meg a letöltött fájlt</strong><span>Az értesítések közül vagy a Fájlok appból, a Letöltések mappából.</span></li>
+      <li><strong>Engedélyezd a telepítést</strong><span>Ha a telefon kéri, kapcsold be az „Ismeretlen alkalmazások telepítése” engedélyt annak az appnak, amiből megnyitottad (böngésző vagy Fájlok). Ez egyszeri lépés.</span></li>
+      <li><strong>Lépj be a Google-fiókoddal</strong><span>Ez kell a közös listákhoz, a háztartáshoz, a Drive-os mentéshez és ahhoz, hogy több telefonod ugyanazt lássa.</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="frissites" class="band-dark">
+  <div class="wrap">
+    <p class="kicker reveal">Frissítés</p>
+    <h2 class="reveal">Magától nő tovább.</h2>
+    <p class="lead reveal">Az appot nem kell figyelned: ha új verzió jelenik meg, maga szól, és egy gombbal letölti és telepíti. Ehhez sem kell Play Áruház.</p>
+    <div class="note reveal"><strong>Adataid.</strong> A napló, az étkezés, az edzés és a ciklus adatai a telefonodon tárolódnak. Ha bekapcsolod, a mentés és a telefonjaid közti szinkron a saját Google Drive-odra kerül. A felhőben csak a közös listák és a háztartás közös adatai vannak, meg egy havi használati számláló (melyik modult hány napon nyitottad meg, tartalom nélkül). Nincs benne hirdetés, és adatot nem adunk tovább harmadik félnek.</div>
+  </div>
+</section>
+
+<section class="final" id="letoltes">
+  <div class="wrap">
+    <img src="splash-logo.jpg" alt="Trellis logó" width="160" height="284" loading="lazy">
+    <p class="lead reveal">Egy szokás, egy étkezés, egy fejezet — a rács kitart, a többi magától nő.</p>
+    <a class="btn dl-link reveal" href="trellis.apk" download>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      Letöltés Androidra
+    </a>
+    <p class="meta" id="meta2">Ingyenes · Android 8.0 vagy újabb</p>
+  </div>
+</section>
+
+<footer>Trellis · készült szeretetből, magyarul · <span id="ver"></span> · <a href="adatkezeles.html">Adatkezelési tájékoztató</a></footer>
+</div>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // A videó egyszer fut le, és a végén a logón áll meg (nincs ismétlés).
+  // Animáció nélküli beállításnál rögtön a kész logó látszik.
+  var v = document.getElementById('film');
+  if (reduce) {
+    var img = new Image(); img.src = 'splash-logo.jpg'; img.alt = '';
+    v.replaceWith(img);
+  } else {
+    // Több ponton is megpróbáljuk: a böngésző a néma automatikus lejátszást
+    // néha csak betöltés után, vagy csak látható lapon engedi.
+    var tryPlay = function(){
+      if (v.ended || !v.paused) return;
+      var p = v.play(); if (p && p.catch) p.catch(function(){});
+    };
+    tryPlay();
+    v.addEventListener('canplay', tryPlay, {once:true});
+    document.addEventListener('visibilitychange', function(){ if (!document.hidden) tryPlay(); });
+    if ('IntersectionObserver' in window) new IntersectionObserver(function(es){
+      if (es[0].isIntersecting) tryPlay();
+    }).observe(v);
+  }
+
+  // Megjelenés görgetésre.
+  var io = 'IntersectionObserver' in window ? new IntersectionObserver(function(es){
+    es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.12}) : null;
+  document.querySelectorAll('.reveal').forEach(function(el, i){
+    if (!io || reduce) { el.classList.add('in'); return; }
+    if (el.classList.contains('card') || el.classList.contains('pill')) el.style.transitionDelay = ((i%3)*90)+'ms';
+    io.observe(el);
+  });
+
+  // Aktív menüsáv.
+  function onScroll(){
+    var cur = null;
+    document.querySelectorAll('section[id]').forEach(function(s){
+      if (s.getBoundingClientRect().top < innerHeight*0.45) cur = s.id;
+    });
+    if (cur === 'mi-ez') cur = 'kezdes';
+    document.querySelectorAll('.rail a').forEach(function(a){ a.classList.toggle('on', a.getAttribute('href') === '#'+cur); });
+  }
+  addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+  // Verzió és méret — kiadáskor csak a latest.json változik.
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  fetch('latest.json?t=' + Date.now()).then(function(r){ return r.json(); }).then(function(d){
+    var mb = d.sizeBytes ? (d.sizeBytes/1048576).toFixed(0) + ' MB · ' : '';
+    var line = 'Ingyenes · reklám nélkül · Android 8.0 vagy újabb<br>' + mb + '<strong>' + esc(d.versionName) + '</strong> verzió';
+    document.getElementById('meta').innerHTML = line;
+    document.getElementById('meta2').innerHTML = line;
+    if (d.apkUrl) document.querySelectorAll('.dl-link').forEach(function(a){ a.href = d.apkUrl; });
+    document.getElementById('ver').textContent = 'legutóbbi kiadás: ' + d.versionName;
+  }).catch(function(){});
+})();
+</script>
+</body>
+</html>
